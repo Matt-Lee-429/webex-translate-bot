@@ -3,7 +3,7 @@ const {Translate} = require('@google-cloud/translate').v2;
 const projectId = process.env.GOOGLE_API_KEY;
 
 // Instantiates a client
-const translate = new Translate({projectId});
+const translate = new Translate({key : projectId});
 
 async function quickStart() {
   // The text to translate
