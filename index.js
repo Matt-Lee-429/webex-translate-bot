@@ -35,7 +35,6 @@ framework.on('spawn', (bot, id, addedBy) => {
             msg = `Hello there. ${msg}`;
         })
         .finally(() => {
-            // Say hello, and tell users what you do!
             if (bot.isDirect) {
             bot.say("markdown", msg);
             } else {
@@ -52,8 +51,6 @@ framework.on('spawn', (bot, id, addedBy) => {
 framework.hears(
   /.*/,
   async (bot, trigger) => {
-    // This will fire for any input so only respond if we haven't already
-    let botName = bot.person.displayName;
     if(Util.hasKorean(trigger.command)){
         console.log(trigger);
         try {
@@ -71,17 +68,10 @@ framework.hears(
         }
     }
     else {
-        // bot.say("No Korean or Vietnamese found.")
     }
 
-    console.log(`catch-all handler fired for user input: ${Util.removeMentionedBotNameFromTriggeredText(trigger.text, botName)}`);
-    // bot
-    //   .say(`Sorry, I don't know how to respond to "${trigger.text}"`)
-    //   .then(() => bot.say("markdown", framework.showHelp()))
-    //   //    .then(() => sendHelp(bot))
-    //   .catch((e) =>
-    //     console.error(`Problem in the unexepected command hander: ${e.message}`)
-    //   );
+    console.log(`catch-all handler fired for user input: ${trigger.command}`);
+
   },
   99999
 );
