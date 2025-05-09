@@ -52,7 +52,6 @@ framework.hears(
   /.*/,
   async (bot, trigger) => {
     if(Util.hasKorean(trigger.command)){
-        console.log(trigger);
         try {
             const translated = await GoogleTranslator.translateChatMessage(trigger.command);
             bot.say(translated);
