@@ -6,10 +6,6 @@ const hasVietnamese = (text) => {
     return /\b(?=\w*[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ])\w+\b/gi.test(text);
 }
 
-const removeMentionedBotNameFromTriggeredText = (text, botName) => {
-    return text.replace(new RegExp(`^${botName}`, ''), "");
-}
-
 module.exports = {
     hasKorean,
     hasVietnamese,

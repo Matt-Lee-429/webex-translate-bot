@@ -42,7 +42,7 @@ framework.on('spawn', (bot, id, addedBy) => {
             let botName = bot.person.displayName;
             msg += `\n\nDon't forget, in order for me to see your messages and translate in this group space, be sure to *@mention* ${botName}.`;
             msg += `\n\nusage: @${botName} <message>`;
-            msg += `\n\nexample: \`@${botName} 안녕하세요\` \`@${botName}\` Xin chào\``;
+            msg += `\n\nexample: \`@${botName} 안녕하세요\` \`@${botName} Xin chào\``;
             bot.say("markdown", msg);
             }
         });
@@ -54,23 +54,24 @@ framework.hears(
   async (bot, trigger) => {
     // This will fire for any input so only respond if we haven't already
     let botName = bot.person.displayName;
-    if(Util.hasKorean(trigger.text)){
+    if(Util.hasKorean(trigger.command)){
+        console.log(trigger);
         try {
-            const translated = await GoogleTranslator.translateChatMessage(Util.removeMentionedBotNameFromTriggeredText(trigger.text, botName));
+            const translated = await GoogleTranslator.translateChatMessage(trigger.command);
             bot.say(translated);
         } catch (error) {
             console.log("Error while using google translation API" + error);
         }
-    } else if(Util.hasVietnamese(trigger.text)){
+    } else if(Util.hasVietnamese(trigger.command)){
         try {
-            const translated = await GoogleTranslator.translateChatMessage(Util.removeMentionedBotNameFromTriggeredText(trigger.text, botName));
+            const translated = await GoogleTranslator.translateChatMessage(trigger.command);
             bot.say(translated);
         } catch (error) {
             console.log("Error while using google translation API" + error);
         }
     }
     else {
-        bot.say("No Korean or Vietnamese found.")
+        // bot.say("No Korean or Vietnamese found.")
     }
 
     console.log(`catch-all handler fired for user input: ${Util.removeMentionedBotNameFromTriggeredText(trigger.text, botName)}`);
