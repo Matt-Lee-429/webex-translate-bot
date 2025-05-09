@@ -11,7 +11,7 @@ Webex 메시지에서 한국어나 베트남어를 감지하여 자동으로 영
 
 ## 기술 스택
 
-- Node.js
+- Node.js (v20 이하)
 - Express.js
 - Google Cloud Translation API
 - Webex Bot Framework
