@@ -9,6 +9,5 @@ const hasVietnamese = (text) => {
 module.exports = {
     hasKorean,
     hasVietnamese,
-    removeMentionedBotNameFromTriggeredText
 };
 
