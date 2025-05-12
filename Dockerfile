@@ -10,4 +10,4 @@ RUN npm install
 
 EXPOSE 6999
 
-CMD ["node", "app.js"]
+CMD ["node", "index.js"]
