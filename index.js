@@ -52,19 +52,18 @@ framework.on('spawn', (bot, id, addedBy) => {
 framework.hears(
   /.*/,
   async (bot, trigger) => {
-    if(Util.hasKorean(trigger.command)){
+    if(trigger.command.startsWith("$$") || trigger.command.startsWith(" $$")){
+        try {
+            const translated = await GoogleTranslator.translateChatMessage(Util.deleteSpecialCharacter(trigger.command), "ko");
+            bot.say(translated);
+        } catch (error) {
+            console.log("Error while using second google translation API" + error);                            
+        }
+    }
+    else if(Util.hasKorean(trigger.command)){
         try {
             const translated = await AimemberTranslator.translateChatMessagetoEN(trigger.command);
-            if(Util.hasVietnamese(translated)){
-                try {
-                    console.log("firsttrans: " + translated)
-                    const secondtrans = await GoogleTranslator.translateChatMessage(translated);
-                    console.log("secondtrans: " + secondtrans )
-                    bot.say(secondtrans);
-                } catch (error) {
-                    console.log("Error while using second google translation API" + error);                            
-                }
-            }else bot.say(translated);
+            bot.say(translated);
         } catch (error) {
             console.log("Error while using aimember translation API" + error);
         }
@@ -78,7 +77,6 @@ framework.hears(
         }
     }
     console.log(`catch-all handler fired for user input: ${trigger.command}`);
-
   },
   99999
 );

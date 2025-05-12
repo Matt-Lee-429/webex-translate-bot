@@ -19,8 +19,8 @@ async function quickStart() {
   return translation;
 }
 
-const translateChatMessage = async (text) => {
-    const target = 'en';
+const translateChatMessage = async (text, target) => {
+    // const target = 'en';
     try {
         const [translation] = await translate.translate(text, target);    
         return translation;

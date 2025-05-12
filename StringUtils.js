@@ -6,8 +6,13 @@ const hasVietnamese = (text) => {
     return /\b(?=\w*[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ])\w+\b/gi.test(text);
 }
 
+const deleteSpecialCharacter = (text) => {
+    return text.replace(/^(\s*)\$\$/, '');
+};
+
 module.exports = {
     hasKorean,
     hasVietnamese,
+    deleteSpecialCharacter,
 };
 
