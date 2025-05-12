@@ -1,0 +1,17 @@
+services:
+  translatebot:
+    image: translatebot
+    container_name: translatebot
+    hostname: translatebot
+    restart: always
+    ports:
+      - "6999:6999"
+    environment:
+      - TZ=Asia/Seoul
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "300m"
+        max-file: "5"
+    volumes:
+      - ./:/usr/src/app

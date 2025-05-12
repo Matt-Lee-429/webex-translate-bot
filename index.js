@@ -5,7 +5,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const Util = require('./StringUtils');
-const GoogleTranslator = require('./GoogleTranslateService');
+const GoogleTranslator = require('./service/GoogleTranslateService');
+const AimemberTranslator = require('./service/AimemberTranslateService');
 app.use(bodyParser.json());
 
 const config = {
@@ -51,29 +52,62 @@ framework.on('spawn', (bot, id, addedBy) => {
 framework.hears(
   /.*/,
   async (bot, trigger) => {
-    if(Util.hasKorean(trigger.command)){
+    if(trigger.command.startsWith("$$") || trigger.command.startsWith(" $$")){
         try {
-            const translated = await GoogleTranslator.translateChatMessage(trigger.command);
+            const translated = await GoogleTranslator.translateChatMessage(Util.deleteSpecialCharacter(trigger.command), "ko");
             bot.say(translated);
         } catch (error) {
-            console.log("Error while using google translation API" + error);
-        }
-    } else if(Util.hasVietnamese(trigger.command)){
-        try {
-            const translated = await GoogleTranslator.translateChatMessage(trigger.command);
-            bot.say(translated);
-        } catch (error) {
-            console.log("Error while using google translation API" + error);
+            console.log("Error while using second google translation API" + error);                            
         }
     }
+    else if(Util.hasKorean(trigger.command)){
+        try {
+            const translated = await AimemberTranslator.translateChatMessagetoEN(trigger.command);
+            bot.say(translated);
+        } catch (error) {
+            console.log("Error while using aimember translation API" + error);
+        }
+    } 
     else {
+        try {
+            const translated = await AimemberTranslator.translateChatMessagetoKR(trigger.command);
+            bot.say(translated);
+        } catch (error) {
+            console.log("Error while using aimember translation API" + error);
+        }
     }
-
     console.log(`catch-all handler fired for user input: ${trigger.command}`);
-
   },
   99999
 );
+
+// Google Translate
+// framework.hears(
+//   /.*/,
+//   async (bot, trigger) => {
+//     if(Util.hasKorean(trigger.command)){
+//         try {
+//             const translated = await GoogleTranslator.translateChatMessage(trigger.command);
+//             bot.say(translated);
+//         } catch (error) {
+//             console.log("Error while using google translation API" + error);
+//         }
+//     } else if(Util.hasVietnamese(trigger.command)){
+//         try {
+//             const translated = await GoogleTranslator.translateChatMessage(trigger.command);
+//             bot.say(translated);
+//         } catch (error) {
+//             console.log("Error while using google translation API" + error);
+//         }
+//     }
+//     else {
+//     }
+
+//     console.log(`catch-all handler fired for user input: ${trigger.command}`);
+
+//   },
+//   99999
+// );
 
 app.post('/', webhook(framework));
 
