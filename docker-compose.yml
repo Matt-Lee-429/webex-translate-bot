@@ -5,7 +5,7 @@ services:
     hostname: translatebot
     restart: always
     ports:
-      - "33000:3000"
+      - "6999:6999"
     environment:
       - TZ=Asia/Seoul
     logging:
