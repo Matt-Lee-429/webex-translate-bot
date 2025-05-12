@@ -8,6 +8,6 @@ COPY . /usr/src/app
 
 RUN npm install
 
-EXPOSE 33000
+EXPOSE 6999
 
 CMD ["node", "app.js"]
