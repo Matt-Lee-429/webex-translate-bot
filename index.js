@@ -5,8 +5,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const Util = require('./StringUtils');
-const GoogleTranslator = require('./service/GoogleTranslateService');
-const AimemberTranslator = require('./service/AimemberTranslateService');
+
+const TranslationManager = require('./service/TranslationManager');
+const GoogleTranslateService = require('./service/GoogleTranslateService');
+const AimemberTranslateService = require('./service/AimemberTranslateService');
+
+const translationManager = new TranslationManager();
+
+translationManager.addService('google', new GoogleTranslateService());
+translationManager.addService('aimember', new AimemberTranslateService());
+
 app.use(bodyParser.json());
 
 const config = {
@@ -52,62 +60,37 @@ framework.on('spawn', (bot, id, addedBy) => {
 framework.hears(
   /.*/,
   async (bot, trigger) => {
-    if(trigger.command.startsWith("$$") || trigger.command.startsWith(" $$")){
+    if(Util.startsWithSpecialCharacter(trigger.command)){
         try {
-            const translated = await GoogleTranslator.translateChatMessage(Util.deleteSpecialCharacter(trigger.command), "ko");
+            translationManager.setCurrentService('google');
+            const translated = await translationManager.translate(Util.deleteSpecialCharacter(trigger.command), "ko");
             bot.say(translated);
         } catch (error) {
-            console.log("Error while using second google translation API" + error);                            
+            console.log("Error occurs google translation API or bot API" + error);                            
         }
     }
     else if(Util.hasKorean(trigger.command)){
         try {
-            const translated = await AimemberTranslator.translateChatMessagetoEN(trigger.command);
+            translationManager.setCurrentService('aimember');
+            const translated = await translationManager.translate(trigger.command, "en");
             bot.say(translated);
         } catch (error) {
-            console.log("Error while using aimember translation API" + error);
+            console.log("Error occurs aimember translation API or bot API" + error);
         }
     } 
     else {
         try {
-            const translated = await AimemberTranslator.translateChatMessagetoKR(trigger.command);
+            translationManager.setCurrentService('aimember');
+            const translated = await translationManager.translate(trigger.command, "ko");
             bot.say(translated);
         } catch (error) {
-            console.log("Error while using aimember translation API" + error);
+            console.log("Error occurs aimember translation API or bot API" + error);
         }
     }
     console.log(`catch-all handler fired for user input: ${trigger.command}`);
   },
   99999
 );
-
-// Google Translate
-// framework.hears(
-//   /.*/,
-//   async (bot, trigger) => {
-//     if(Util.hasKorean(trigger.command)){
-//         try {
-//             const translated = await GoogleTranslator.translateChatMessage(trigger.command);
-//             bot.say(translated);
-//         } catch (error) {
-//             console.log("Error while using google translation API" + error);
-//         }
-//     } else if(Util.hasVietnamese(trigger.command)){
-//         try {
-//             const translated = await GoogleTranslator.translateChatMessage(trigger.command);
-//             bot.say(translated);
-//         } catch (error) {
-//             console.log("Error while using google translation API" + error);
-//         }
-//     }
-//     else {
-//     }
-
-//     console.log(`catch-all handler fired for user input: ${trigger.command}`);
-
-//   },
-//   99999
-// );
 
 app.post('/', webhook(framework));
 

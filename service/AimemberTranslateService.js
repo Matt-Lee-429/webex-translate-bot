@@ -1,67 +1,36 @@
-require('dotenv').config();
-var axios = require('axios');
-var bodyParser = require('body-parser');
-const API_TOKEN = process.env.AIMEMBER_API_KEY;
-const API_ENDPOINT = process.env.LOTTE_AI_API_ENDPOINT;
+const BaseTranslateService = require('./BaseTranslateService');
+const axios = require('axios');
 
-const option ={
-    "Content-Type": "application/json",
-    "Authorization": "Bearer " + API_TOKEN,
-};
-
-const translateChatMessagetoEN = async (text) => {
-    const src_lang = 'ko'
-    const tgt_lang = 'en-us';
-
-    const body = {
-        "doc": text,
-        "src_lang": src_lang,
-        "tgt_lang": tgt_lang,
+class AimemberTranslateService extends BaseTranslateService {
+    constructor() {
+        super();
+        this.apiToken = process.env.AIMEMBER_API_KEY;
+        this.apiEndpoint = process.env.LOTTE_AI_API_ENDPOINT;
+        this.options = {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this.apiToken,
+            }
+        };
     }
 
-    try {
-        const translation = await axios.post(API_ENDPOINT + "/api/translate", body, {headers: option});
-        if (translation.data.result.length == 1){
-            console.log(translation.data.result[0].DEEPL);
-            return translation.data.result[0].DEEPL;
+    async translate(text, targetLang = 'en') {
+        const sourceLang = targetLang === 'en' ? 'ko' : 'en';
+
+        const body = {
+            "doc": text,
+            "src_lang": sourceLang,
+            "tgt_lang": targetLang,
         }
-        else {
-            console.log(translation.data.result[1].DEEPL);
-            return translation.data.result[1].DEEPL;
+
+        try {
+            const translation = await axios.post(`${this.apiEndpoint}/api/translate`, body, this.options)
+            return translation.data.result.length === 1 ? translation.data.result[0].DEEPL : translation.data.result[1].DEEPL;
+        } catch (error) {
+            console.error("Error while using Aimember Translation API: " + error);
+            throw error;
         }
-    } catch (error) {
-        console.log("Error while using Aimember translation API" + error);
-        throw error;
     }
-};
-
-const translateChatMessagetoKR = async (text) => {
-    const src_lang = 'en'
-    const tgt_lang = 'ko';
-
-    const body = {
-        "doc": text,
-        "src_lang": src_lang,
-        "tgt_lang": tgt_lang,
-    }
-
-    try {
-        const translation = await axios.post(API_ENDPOINT + "/api/translate", body, {headers: option});
-        if (translation.data.result.length == 1){
-            console.log(translation.data.result[0].DEEPL);
-            return translation.data.result[0].DEEPL;
-        }
-        else {
-            console.log(translation.data.result[1].DEEPL);
-            return translation.data.result[1].DEEPL;
-        }
-    } catch (error) {
-        console.log("Error while using Aimember translation API" + error);
-        throw error;
-    }
-};
-
-module.exports = {
-    translateChatMessagetoEN,
-    translateChatMessagetoKR
 }
+
+module.exports = AimemberTranslateService;
