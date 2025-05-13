@@ -10,9 +10,14 @@ const deleteSpecialCharacter = (text) => {
     return text.replace(/^(\s*)\$\$/, '');
 };
 
+const startsWithSpecialCharacter = (text) => {
+    return /^(\s*)\$\$/.test(text);
+}
+
 module.exports = {
     hasKorean,
     hasVietnamese,
     deleteSpecialCharacter,
+    startsWithSpecialCharacter
 };
 
