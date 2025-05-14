@@ -49,8 +49,13 @@ framework.on('spawn', (bot, id, addedBy) => {
             } else {
             let botName = bot.person.displayName;
             msg += `\n\nDon't forget, in order for me to see your messages and translate in this group space, be sure to *@mention* ${botName}.`;
-            msg += `\n\nusage: @${botName} <message>`;
-            msg += `\n\nexample: \`@${botName} 안녕하세요\` \`@${botName} Xin chào\``;
+            msg += `\n\nusage:`;
+            msg += `\n\nfor English and Korean \`@${botName} message\``;
+            msg += `\n\nfor Vietnamese \`@${botName}$$message\` (need to add double dollar sign($$))`
+            msg += `\n\nexample:`;
+            msg += `\n\n\`@${botName}Hello\``;
+            msg += `\n\n\`@${botName}안녕하세요\``;
+            msg += `\n\n\`@${botName}$$Xin chào\``;
             bot.say("markdown", msg);
             }
         });
