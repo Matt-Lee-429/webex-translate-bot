@@ -49,13 +49,20 @@ framework.on('spawn', (bot, id, addedBy) => {
             } else {
             let botName = bot.person.displayName;
             msg += `\n\nDon't forget, in order for me to see your messages and translate in this group space, be sure to *@mention* ${botName}.`;
-            msg += `\n\nusage:`;
-            msg += `\n\nfor English and Korean \`@${botName} message\``;
-            msg += `\n\nfor Vietnamese \`@${botName}$$message\` (need to add double dollar sign($$))`
-            msg += `\n\nexample:`;
+            msg += `\n\n### usage:`;
+            msg += `\n\nTo Korean `;
+            msg += `\n\n* From English : \`@${botName}message\``;
+            msg += `\n\n* From every language : \`@${botName}$$message\` *(needs $$)*`;
+            msg += `\n\nTo English`;
+            msg += `\n\n* From Korean : \`@${botName}message\``;
+            msg += `\n\nTo Mongolian`;
+            msg += `\n\n* From every language : \`@${botName}##message\` *(needs ##)*`;
+            msg += `\n\n### example:`;
             msg += `\n\n\`@${botName}Hello\``;
             msg += `\n\n\`@${botName}안녕하세요\``;
             msg += `\n\n\`@${botName}$$Xin chào\``;
+            msg += `\n\n\`@${botName}$$сайн уу\``;
+            msg += `\n\n\`@${botName}##안녕하세요\``;
             bot.say("markdown", msg);
             }
         });
@@ -65,13 +72,22 @@ framework.on('spawn', (bot, id, addedBy) => {
 framework.hears(
   /.*/,
   async (bot, trigger) => {
-    if(Util.startsWithSpecialCharacter(trigger.command)){
+    if(Util.startsWithDoubleDollarSign(trigger.command)){
         try {
             translationManager.setCurrentService('google');
-            const translated = await translationManager.translate(Util.deleteSpecialCharacter(trigger.command), "ko");
+            const translated = await translationManager.translate(Util.deleteDoubleDollarSign(trigger.command), "ko");
             bot.say(translated);
         } catch (error) {
-            console.log("Error occurs google translation API or bot API" + error);                            
+            console.log("Error occurs in google translation API or bot API" + error);                            
+        }
+    }
+    else if(Util.startsWithDoubleHash(trigger.command)){
+        try {
+            translationManager.setCurrentService('google');
+            const translated = await translationManager.translate(Util.deleteDoubleHash(trigger.command), "mn")
+            bot.say(translated);
+        } catch (error) {
+            console.log("Error while translating to mongolian");
         }
     }
     else if(Util.hasKorean(trigger.command)){

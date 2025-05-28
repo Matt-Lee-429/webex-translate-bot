@@ -6,18 +6,28 @@ const hasVietnamese = (text) => {
     return /\b(?=\w*[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ])\w+\b/gi.test(text);
 }
 
-const deleteSpecialCharacter = (text) => {
+const deleteDoubleDollarSign = (text) => {
     return text.replace(/^(\s*)\$\$/, '');
 };
 
-const startsWithSpecialCharacter = (text) => {
+const startsWithDoubleDollarSign = (text) => {
     return /^(\s*)\$\$/.test(text);
+}
+
+const deleteDoubleHash = (text) => {
+    return text.replace(/^(\s*)##/, '');
+}
+
+const startsWithDoubleHash = (text) => {
+    return /^(\s*)##/.test(text);
 }
 
 module.exports = {
     hasKorean,
     hasVietnamese,
-    deleteSpecialCharacter,
-    startsWithSpecialCharacter
+    deleteDoubleDollarSign,
+    startsWithDoubleDollarSign,
+    deleteDoubleHash,
+    startsWithDoubleHash,
 };
 
