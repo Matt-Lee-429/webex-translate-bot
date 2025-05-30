@@ -1,5 +1,6 @@
 const BaseTranslateService = require('./BaseTranslateService');
 const axios = require('axios');
+const Util = require('../StringUtils');
 
 class AimemberTranslateService extends BaseTranslateService {
     constructor() {
@@ -14,13 +15,22 @@ class AimemberTranslateService extends BaseTranslateService {
         };
     }
 
-    async translate(text, targetLang = 'en') {
-        const sourceLang = targetLang === 'en' ? 'ko' : 'en';
+    async translate(text) {
+        let srcLang = 'EN';
+        let descLang = 'KO';
+
+        if (Util.hasVietnamese(text)){
+            srcLang = 'VI';
+            descLang = 'KO';
+        } else if (Util.hasKorean(text)){
+            srcLang = 'KO';
+            descLang = 'EN-US';
+        }
 
         const body = {
             "doc": text,
-            "src_lang": sourceLang,
-            "tgt_lang": targetLang,
+            "src_lang": srcLang,
+            "tgt_lang": descLang,
         }
 
         try {

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path:'.env.test'});
 var framework = require('webex-node-bot-framework');
 const webhook = require('webex-node-bot-framework/webhook');
 const express = require('express');
@@ -51,18 +51,15 @@ framework.on('spawn', (bot, id, addedBy) => {
             msg += `\n\nDon't forget, in order for me to see your messages and translate in this group space, be sure to *@mention* ${botName}.`;
             msg += `\n\n### usage:`;
             msg += `\n\nTo Korean `;
-            msg += `\n\n* From English : \`@${botName}message\``;
+            msg += `\n\n* From English and Vietnamese : \`@${botName}message\``;
             msg += `\n\n* From every language : \`@${botName}$$message\` *(needs $$)*`;
             msg += `\n\nTo English`;
             msg += `\n\n* From Korean : \`@${botName}message\``;
-            msg += `\n\nTo Mongolian`;
             msg += `\n\n* From every language : \`@${botName}##message\` *(needs ##)*`;
-            msg += `\n\n### example:`;
-            msg += `\n\n\`@${botName}Hello\``;
-            msg += `\n\n\`@${botName}안녕하세요\``;
-            msg += `\n\n\`@${botName}$$Xin chào\``;
-            msg += `\n\n\`@${botName}$$сайн уу\``;
-            msg += `\n\n\`@${botName}##안녕하세요\``;
+            msg += `\n\nTo Mongolian`;
+            msg += `\n\n* From every language : \`@${botName}^^message\` *(needs ^^)*`;
+            // msg += `\n\nTo Vietnamese`;
+            // msg += `\n\n* From every language : \`@${botName}&&message\` *(needs &&)*`;
             bot.say("markdown", msg);
             }
         });
@@ -72,40 +69,22 @@ framework.on('spawn', (bot, id, addedBy) => {
 framework.hears(
   /.*/,
   async (bot, trigger) => {
-    if(Util.startsWithDoubleDollarSign(trigger.command)){
+    if(Util.isStartsWithSpecialChar(trigger.command)){
         try {
             translationManager.setCurrentService('google');
-            const translated = await translationManager.translate(Util.deleteDoubleDollarSign(trigger.command), "ko");
+            const translated = await translationManager.translate(trigger.command)
             bot.say(translated);
         } catch (error) {
-            console.log("Error occurs in google translation API or bot API" + error);                            
+            console.log("Error in google translation service");
         }
     }
-    else if(Util.startsWithDoubleHash(trigger.command)){
-        try {
-            translationManager.setCurrentService('google');
-            const translated = await translationManager.translate(Util.deleteDoubleHash(trigger.command), "mn")
-            bot.say(translated);
-        } catch (error) {
-            console.log("Error while translating to mongolian");
-        }
-    }
-    else if(Util.hasKorean(trigger.command)){
-        try {
-            translationManager.setCurrentService('aimember');
-            const translated = await translationManager.translate(trigger.command, "en");
-            bot.say(translated);
-        } catch (error) {
-            console.log("Error occurs aimember translation API or bot API" + error);
-        }
-    } 
     else {
         try {
             translationManager.setCurrentService('aimember');
-            const translated = await translationManager.translate(trigger.command, "ko");
+            const translated = await translationManager.translate(trigger.command);
             bot.say(translated);
         } catch (error) {
-            console.log("Error occurs aimember translation API or bot API" + error);
+            console.log("Error in aimember translation service" + error);
         }
     }
     console.log(`catch-all handler fired for user input: ${trigger.command}`);
