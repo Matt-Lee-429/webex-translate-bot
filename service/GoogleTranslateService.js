@@ -19,10 +19,10 @@ class GoogleTranslateService extends BaseTranslateService {
             descLang = 'KO';
         } else if(Util.startsWithDoubleHash(text)){
             text = Util.deleteDoubleHash(text);
-            descLang = 'EN';
+            descLang = 'MN';
         } else if(Util.startsWithDoubleCaret(text)){
             text = Util.deleteDoubleCaret(text);
-            descLang = 'MN';
+            descLang = 'EN';
         } else if(Util.startsWithDoubleAmpersand(text)){
             text = Util.deleteDoubleAmpersand(text);
             descLang = 'VI';
