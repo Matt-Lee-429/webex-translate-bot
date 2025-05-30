@@ -1,4 +1,4 @@
-require('dotenv').config({path:'.env.test'});
+require('dotenv').config();
 var framework = require('webex-node-bot-framework');
 const webhook = require('webex-node-bot-framework/webhook');
 const express = require('express');
