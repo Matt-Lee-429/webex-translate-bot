@@ -22,6 +22,26 @@ const startsWithDoubleHash = (text) => {
     return /^(\s*)##/.test(text);
 }
 
+const deleteDoubleCaret = (text) => {
+    return text.replace(/^(\s*)\^\^/, '');
+}
+
+const startsWithDoubleCaret = (text) => {
+    return /^(\s*)\^\^/.test(text);
+}
+
+const deleteDoubleAmpersand = (text) => {
+    return text.replace(/^(\s*)&&/, '');
+}
+
+const startsWithDoubleAmpersand = (text) => {
+    return /^(\s*)&&/.test(text);
+}
+
+const isStartsWithSpecialChar = (text) =>{
+    return /^(\s*)(\$\$|##|\^\^|&&)/.test(text);
+}
+
 module.exports = {
     hasKorean,
     hasVietnamese,
@@ -29,5 +49,10 @@ module.exports = {
     startsWithDoubleDollarSign,
     deleteDoubleHash,
     startsWithDoubleHash,
+    deleteDoubleAmpersand,
+    startsWithDoubleAmpersand,
+    deleteDoubleCaret,
+    startsWithDoubleCaret,
+    isStartsWithSpecialChar,
 };
 

@@ -1,5 +1,5 @@
 class BaseTranslateService{
-    async translate(text, targetLang){
+    async translate(text){
         throw new Error('translate method must be implemented');
     }
 }

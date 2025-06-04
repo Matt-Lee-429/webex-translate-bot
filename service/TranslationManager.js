@@ -18,11 +18,11 @@ class TranslationManager {
         this.currentService = this.services.get(name);
     }
 
-    async translate(text, targetLang) {
+    async translate(text) {
         if(!this.currentService) {
             throw new Error("No translation Service provided");
         }
-        return await this.currentService.translate(text, targetLang);
+        return await this.currentService.translate(text);
     }
 }
 
