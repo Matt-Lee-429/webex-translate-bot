@@ -55,9 +55,11 @@ framework.on('spawn', (bot, id, addedBy) => {
             msg += `\n\n* From every language : \`@${botName}$$message\` *(needs $$)*`;
             msg += `\n\nTo English`;
             msg += `\n\n* From Korean : \`@${botName}message\``;
-            msg += `\n\n* From every language : \`@${botName}##message\` *(needs ^^)*`;
+            msg += `\n\n* From every language : \`@${botName}^^message\` *(needs ^^)*`;
             msg += `\n\nTo Mongolian`;
-            msg += `\n\n* From every language : \`@${botName}^^message\` *(needs ##)*`;
+            msg += `\n\n* From every language : \`@${botName}##message\` *(needs ##)*`;
+            msg += `\n\nTo Vietnamese`;
+            msg += `\n\n* From every language : \`@${botName}&&message\` *(needs &&)*`;
             // msg += `\n\nTo Vietnamese`;
             // msg += `\n\n* From every language : \`@${botName}&&message\` *(needs &&)*`;
             bot.say("markdown", msg);
