@@ -35,7 +35,9 @@ class AimemberTranslateService extends BaseTranslateService {
 
         try {
             const translation = await axios.post(`${this.apiEndpoint}/api/translate`, body, this.options)
-            return translation.data.result.length === 1 ? translation.data.result[0].DEEPL : translation.data.result[1].DEEPL;
+            return translation.data.result.length > 0 
+                ? translation.data.result 
+                : 'Translation Failed. Try with special character ($$, ^^, &&, ##)';
         } catch (error) {
             console.error("Error while using Aimember Translation API: " + error);
             throw error;
